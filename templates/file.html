@@ -19,7 +19,7 @@
 
         function saveContent() {
             const newContent = contentDiv.innerHTML;
-            const filePath = window.location.pathname.substring('/file/'.length);
+            const filePath = '{{ file_path }}';
 
             fetch(`/api/save/${filePath}`, {
                 method: 'POST',
