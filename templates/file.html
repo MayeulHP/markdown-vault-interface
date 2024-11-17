@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Obsidian Vault Viewer</title>
+    <link rel="stylesheet" href="{{ url_for('serve_static', path='style.css') }}">
+</head>
+<body>
+    <div id="content" class="markdown-body">
+        {{ content | safe }}
+    </div>
+    <script>
+        const contentDiv = document.getElementById('content');
+        let originalContent = contentDiv.innerHTML;
+
+        function editContent() {
+            contentDiv.contentEditable = true;
+            contentDiv.focus();
+        }
+
+        function saveContent() {
+            const newContent = contentDiv.innerHTML;
+            const filePath = window.location.pathname.substring('/file/'.length);
+
+            fetch(`/api/save/${filePath}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `content=${encodeURIComponent(newContent)}`,
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data); // Log the response from the server
+                contentDiv.contentEditable = false;
+                originalContent = newContent;
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                contentDiv.innerHTML = originalContent; // Restore original content on error
+                contentDiv.contentEditable = false;
+            });
+        }
+
+    </script>
+    <button onclick="editContent()">Edit</button>
+    <button onclick="saveContent()">Save</button>
+    <a href="/">Back to Index</a>
+</body>
+</html>

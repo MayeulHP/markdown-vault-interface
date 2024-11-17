@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Obsidian Vault Viewer</title>
+    <link rel="stylesheet" href="{{ url_for('serve_static', path='style.css') }}">
+</head>
+<body>
+    <h1>Obsidian Vault Viewer</h1>
+    <ul>
+        {% for file in files %}
+        <li><a href="{{ url_for('serve_file', file_path=file) }}">{{ file }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
